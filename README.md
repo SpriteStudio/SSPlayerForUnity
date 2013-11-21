@@ -1,4 +1,5 @@
 SSPlayerForUnity
 ================
 
-SpriteStudio Player for Unity. Usable with ssax file.
+Please see the file below:
+./Project/Assets/SpriteStudio/readme.txt

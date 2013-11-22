@@ -18,6 +18,9 @@
 //#define _BOUND_PART_DRAW_AS_INVALID
 //#define _MOVE_BOUND_PART_TO_THE_FRONT
 
+// inherits hide status when forced visible is available.
+#define _INHERITS_FORCE_VISIBLE
+	
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -71,7 +74,22 @@ public class SsPart : IComparable<SsPart>
 		if (_triIndices != null)
 			SetToSubmeshArray(_subMeshIndex);
 	}
-	
+
+	bool _forceAlphaAvailable = false;
+	float _forceAlpha = 1f;
+
+	public void
+	ForceAlpha(float v)
+	{
+		_forceAlphaAvailable = true;
+		_forceAlpha = v;
+	}
+
+	public void
+	ResetForceAlpha()
+	{
+		_forceAlphaAvailable = false;
+	}	
 	internal	Vector3		_pos;			///< local position
 	internal	Quaternion	_quaternion;	///< local rotation
 	internal	Vector3		_scale;			///< local scale
@@ -349,8 +367,11 @@ public class SsPart : IComparable<SsPart>
 	internal void
 	SetToSubmeshArray(int index)
 	{
+#if _INHERITS_FORCE_VISIBLE
+		bool v = _visible;
+#else
 		bool v = _forceVisibleAvailable ? _forceVisible : _visible;
-
+#endif
 		// if _triIndices is null, draw nothing.
 #if _USE_TRIANGLE_STRIP
 		_mesh.SetTriangleStrip(v ? _triIndices : null, index);
@@ -365,9 +386,12 @@ public class SsPart : IComparable<SsPart>
 	{
 		_visible = v;
 
+#if _INHERITS_FORCE_VISIBLE
+#else
 		if (_forceVisibleAvailable)
 			v = _forceVisible;
-
+#endif
+		
 #if _USE_TRIANGLE_STRIP
 		_mesh.SetTriangleStrip(v ? _triIndices : null, _subMeshIndex);
 #else
@@ -442,6 +466,10 @@ public class SsPart : IComparable<SsPart>
 					else
 						nowVisible = !res.Hide(frame);
 				}
+#if _INHERITS_FORCE_VISIBLE
+				if (_forceVisibleAvailable)
+					nowVisible = _forceVisible;
+#endif
 				if (nowVisible != _visible)
 					Show(nowVisible);
 			}
@@ -510,6 +538,8 @@ public class SsPart : IComparable<SsPart>
 				// just multiply simply 
 				nowAlpha = parentAlpha * nowAlpha;
 			}
+			if (_forceAlphaAvailable)
+				nowAlpha = _forceAlpha;
 			if (nowAlpha != AlphaValue)
 				AlphaValue = nowAlpha;
 		}

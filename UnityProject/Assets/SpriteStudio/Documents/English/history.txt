@@ -10,6 +10,10 @@
 
   - Added a method to show/hide a part forcefully. This method overrides Hide attribute status.
     ForceShow(bool v), ResetForceShow()
+    Also added a method to specify alpha forcefully.
+    ForceAlpha(float v), ResetForceAlpha()
+    * Disable _INHERITS_FORCE_VISIBLE in SsPart.cs if you do not want to inherit forced visibility.
+
   - Added a method to specify Start/End frame at a time. (SetStartEndFrame)
   - Added a sample to play the range marked by user data string stored as label.
 

@@ -9,9 +9,12 @@
 [Ver.1.27f1] (2013/11/21)
 
   [その他]
-  ・強制的に指定パーツの表示状態を制御するメソッドを SsPart.cs に追加しました。
-    このメソッドの指定は非表示アトリビュートの状態を上書きします。
+  ・強制的に指定パーツの表示状態・不透明度を制御するメソッドを SsPart.cs に追加しました。
+    このメソッドの指定は非表示・不透明度アトリビュートの状態を上書きします。
     ForceShow(bool v), ResetForceShow()
+    ForceAlpha(float v), ResetForceAlpha()
+    ※非表示指定を継承させたくない場合は、SsPart.cs の _INHERITS_FORCE_VISIBLE を無効化して下さい。
+
   ・開始・終了フレームを同時に指定するメソッド SetStartEndFrame を追加しました。
 
   [サンプル]

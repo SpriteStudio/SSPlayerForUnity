@@ -2,4 +2,9 @@ SSPlayerForUnity
 ================
 
 Please see the file below:
-./Project/Assets/SpriteStudio/readme.txt
+
+./UnityProject/Assets/SpriteStudio/readme.txt
+
+See also documents under the folder below:
+
+./UnityProject/Assets/SpriteStudio/Documents/

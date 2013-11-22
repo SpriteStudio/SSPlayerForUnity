@@ -384,6 +384,13 @@ public class SsSprite : MonoBehaviour
 		}
 	}
 	public	int				_endAnimeFrame;	// 'public' to show in inspector
+
+	// Set Start/End animation frame
+	public	void			SetStartEndFrame(int start, int end)
+	{
+		_startAnimeFrame = start < 0 ? 0 : (start > _animation.EndFrame ? _animation.EndFrame : start);
+		_endAnimeFrame = end < 0 ? 0 : (end > _animation.EndFrame ? _animation.EndFrame : end);
+	}
 	
 	// Is last frame
 	public	bool			IsLastFrame()

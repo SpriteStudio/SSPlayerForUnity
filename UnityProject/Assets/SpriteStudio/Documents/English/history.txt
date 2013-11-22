@@ -6,7 +6,7 @@
  Copyright(C) 2003-2013 Web Technology Corp.
 =============================================================================
 
-[Ver.1.27] (2013/11/21)
+[Ver.1.27f1] (2013/11/21)
 
   - Added a method to specify Start/End frame at a time. (SetStartEndFrame)
   - Added a sample to play the range marked by user data string stored as label.

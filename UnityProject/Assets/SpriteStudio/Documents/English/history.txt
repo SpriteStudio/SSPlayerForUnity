@@ -8,6 +8,8 @@
 
 [Ver.1.27f1] (2013/11/21)
 
+  - Added a method to show/hide a part forcefully. This method overrides Hide attribute status.
+    ForceShow(bool v), ResetForceShow()
   - Added a method to specify Start/End frame at a time. (SetStartEndFrame)
   - Added a sample to play the range marked by user data string stored as label.
 

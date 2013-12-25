@@ -519,6 +519,9 @@ public class SsSprite : MonoBehaviour
 	// update the bounding box of the BoxCollider when the animation is updated.
 	public	bool			UpdateCollider = false;
 
+	// apply scale rotation of the GameObject to bounding parts.
+	public	bool			applyGameObjectScaleRotToBoundingParts_ = true;
+
 	//--------- followings are for debug
 	
 	// Draw bounding box generated Unity Bounds class.

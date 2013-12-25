@@ -132,6 +132,7 @@ public class SsPart : IComparable<SsPart>
 	int			_imgOfsY;
 	int			_imgOfsW;
 	int			_imgOfsH;
+	SsRect		_curPicArea;
 	
 	// origin offset
 	Vector3		_originOffset = Vector3.zero;
@@ -402,6 +403,9 @@ public class SsPart : IComparable<SsPart>
 	internal void
 	Update(bool initialize = false)
 	{
+		if (_curPicArea == null)
+			_curPicArea = _res.PicArea;
+
 		UpdateSub(_res, (int)_mgr.AnimFrame, initialize);
 
 		if (_subAnimes != null && _subAnimes.Count > 0)
@@ -643,6 +647,24 @@ public class SsPart : IComparable<SsPart>
 				_mgr._uvChanged = true;
 				sizeChnaged = true;
 			}
+			if (!_mgr._uvChanged
+			&&	_curPicArea != res.PicArea)
+			{
+				// care about image reference changes by sub anime
+				if (_curPicArea.Width != res.PicArea.Width
+				||	_curPicArea.Height != res.PicArea.Height)
+				{
+					_mgr._uvChanged = true;
+					sizeChnaged = true;
+				}
+				else
+				{
+					if (_curPicArea.Left != res.PicArea.Left
+					||	_curPicArea.Top != res.PicArea.Top)
+						_mgr._uvChanged = true;
+				}
+			}
+				
 			if (sizeChnaged)
 			{
 				// modify polygon size
@@ -655,6 +677,7 @@ public class SsPart : IComparable<SsPart>
 			if (_mgr._uvChanged)
 			{
 				res.CalcUVs(_imgOfsX, _imgOfsY, _imgOfsW, _imgOfsH);
+				_curPicArea = res.PicArea;
 			}
 		}
 		
@@ -1048,8 +1071,8 @@ public class SsPart : IComparable<SsPart>
 				return false;
 		}
 		// make offset vectors from latest vertices
-		Vector3[] myPoints = MakeGlobalPoints(_mgr.transform.position, _mgr._vertices, _vIndex);
-		Vector3[] otPoints = MakeGlobalPoints(other._mgr.transform.position, other._mgr._vertices, other._vIndex);
+		Vector3[] myPoints = MakeGlobalPoints(_mgr.transform, _mgr._vertices, _vIndex);
+		Vector3[] otPoints = MakeGlobalPoints(other._mgr.transform, other._mgr._vertices, other._vIndex);
 		// containes other points in my plane?
 		for (int i = 0; i < 4; ++i)
 			if (ContainsPointInPlane(myPoints, otPoints[i]))
@@ -1065,20 +1088,30 @@ public class SsPart : IComparable<SsPart>
 	DrawBoundingPart()
 	{
 		// make global vertices
-		Vector3[] myPoints = MakeGlobalPoints(_mgr.transform.position, _mgr._vertices, _vIndex);
+		Vector3[] myPoints = MakeGlobalPoints(_mgr.transform, _mgr._vertices, _vIndex);
+		
 		// draw bounds
 		DrawQuadrangle(myPoints[0], myPoints[1], myPoints[2], myPoints[3], Color.green);
 	}
 	
-	Vector3[] MakeGlobalPoints(Vector3 gpos, Vector3[] verts, int startIndex)
+	Vector3[] MakeGlobalPoints(Transform globalTrans, Vector3[] verts, int startIndex)
 	{
 		// vertex order is:
 		// 01
 		// 32
 		// make offset vectors
 		Vector3[] points = new Vector3[4];
-		for (int i = 0; i < 4; ++i)
-			points[i] = gpos + verts[startIndex + i];
+		if (_mgr.applyGameObjectScaleRotToBoundingParts_)
+		{
+			for (int i = 0; i < 4; ++i)
+				points[i] = globalTrans.localToWorldMatrix.MultiplyPoint(verts[startIndex + i]);
+		}
+		else
+		{
+			for (int i = 0; i < 4; ++i)
+				points[i] = globalTrans.position + verts[startIndex + i];
+		}
+		
 		return points;
 	}
 					
@@ -1112,8 +1145,8 @@ public class SsPart : IComparable<SsPart>
 		// 32
 		// get min, max position
 		Vector3 mlt, mrb, olt, orb;
-		MakeMinMaxPosition(_mgr.transform.position, v, _vIndex, out mlt, out mrb);
-		MakeMinMaxPosition(other._mgr.transform.position, o, other._vIndex, out olt, out orb);
+		MakeMinMaxPosition(_mgr.transform, v, _vIndex, out mlt, out mrb);
+		MakeMinMaxPosition(other._mgr.transform, o, other._vIndex, out olt, out orb);
 #if true
 		if (mrb.x >= olt.x && mrb.y >= olt.y
 		&&	orb.x >= mlt.x && orb.y >= mlt.y)
@@ -1137,7 +1170,7 @@ public class SsPart : IComparable<SsPart>
 	{
 		// make vertices sorted by clockwise from left top
 		Vector3 lt, rb;
-		MakeMinMaxPosition(_mgr.transform.position, _mgr._vertices, _vIndex, out lt, out rb);
+		MakeMinMaxPosition(_mgr.transform, _mgr._vertices, _vIndex, out lt, out rb);
 		// draw bounds
 		DrawRectangle(lt, rb, Color.red);
 	}
@@ -1146,7 +1179,7 @@ public class SsPart : IComparable<SsPart>
 	static Vector3 sVec3Max = new Vector3(float.MaxValue, float.MaxValue);
 	
 	void
-	MakeMinMaxPosition(Vector3 gpos, Vector3[] verts, int startIndex, out Vector3 lt, out Vector3 rb)
+	MakeMinMaxPosition(Transform globalTrans, Vector3[] verts, int startIndex, out Vector3 lt, out Vector3 rb)
 	{
 		// vertex order is:
 		// 01
@@ -1156,7 +1189,11 @@ public class SsPart : IComparable<SsPart>
 		rb = sVec3Min;
 		for (int i = 0; i < 4; ++i)
 		{
-			Vector3 v = verts[startIndex + i] + gpos;
+			Vector3 v;
+			if (_mgr.applyGameObjectScaleRotToBoundingParts_)
+				v = globalTrans.localToWorldMatrix.MultiplyPoint(verts[startIndex + i]);
+			else
+				v = verts[startIndex + i] + globalTrans.position;
 			if (v.x < lt.x) lt.x = v.x;
 			if (v.x > rb.x) rb.x = v.x;
 			if (v.y < lt.y) lt.y = v.y;

@@ -6,6 +6,10 @@
  Copyright(C) 2003-2013 Web Technology Corp.
 =============================================================================
 
+[Ver.1.28b2] (2013/12/27)
+  - Fixed that bees in GameScene don't turn into red on UnityPlayer due to the lack of shader they need.
+  - Added shaders multiply with material color to the reference array in __SsShaderKeeper_DoNotDeleteMe.prefab.
+
 [Ver.1.28b1] (2013/12/25)
   - Fixed an issue that the first image X/Y/W/H offset anime as sub anime 
     cannot be applied due to not calling UV change process when main anime

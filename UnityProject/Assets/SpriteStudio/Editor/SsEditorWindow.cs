@@ -3,7 +3,7 @@
 	
 	Settings / About window and about shader keeper addition...
 	
-	Copyright(C) 2003-2013 Web Technology Corp. 
+	Copyright(C) Web Technology Corp. 
 	
 */
 

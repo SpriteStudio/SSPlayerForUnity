@@ -3,7 +3,7 @@
 	
 	A part of sprite
 	
-	Copyright(C) 2003-2013 Web Technology Corp. 
+	Copyright(C) Web Technology Corp. 
 	
 */
 

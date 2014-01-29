@@ -3,8 +3,12 @@
 
   Releasae notes
 
- Copyright(C) 2003-2013 Web Technology Corp.
+ Copyright(C) Web Technology Corp.
 =============================================================================
+
+[Ver.1.28b3] (2014/1/29)
+  - Fixed an issue that a rotation animation plays with chattering if the difference between keyframes is a subtle under
+  under about 3.6 degree.
 
 [Ver.1.28b2] (2013/12/27)
   - Fixed that bees in GameScene don't turn into red on UnityPlayer due to the lack of shader they need.

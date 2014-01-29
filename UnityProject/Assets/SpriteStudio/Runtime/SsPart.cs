@@ -91,6 +91,7 @@ public class SsPart : IComparable<SsPart>
 		_forceAlphaAvailable = false;
 	}	
 	internal	Vector3		_pos;			///< local position
+	internal	float		_ang;			///< local eular angle for finding exquiste angle change.
 	internal	Quaternion	_quaternion;	///< local rotation
 	internal	Vector3		_scale;			///< local scale
 #if _MAKE_ROOT_TO_LOCAL_TRANSFORM
@@ -277,6 +278,7 @@ public class SsPart : IComparable<SsPart>
 		_flipH		= false;
 		_flipV		= false;
 		_pos		= Vector3.zero;
+		_ang		= 0;
 		_quaternion	= Quaternion.identity;
 		_scale		= Vector3.one;
 #if _MAKE_ROOT_TO_LOCAL_TRANSFORM
@@ -571,10 +573,11 @@ public class SsPart : IComparable<SsPart>
 					ang *= -1;
 				if (_mgr.hFlip ^ _mgr.vFlip) ang *= -1;
 			}
-			Quaternion rot = Quaternion.Euler(0,0,ang);
-			if (rot != _quaternion)
+			// changed comparison from quaternion to Eular angle value to prevent missing update from exquisite moving.
+			if (ang != _ang)
 			{
-				_quaternion = rot;
+				_ang = ang;
+				_quaternion = Quaternion.Euler(0,0,ang);
 				_mgr._vertChanged = true;
 #if _MAKE_ROOT_TO_LOCAL_TRANSFORM
 				_rotChanged = true;

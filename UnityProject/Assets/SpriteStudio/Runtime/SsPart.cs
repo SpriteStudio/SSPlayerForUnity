@@ -191,6 +191,10 @@ public class SsPart : IComparable<SsPart>
 		set {
 			// must set value to the all vertices to allow vertex shader to get the value.
 			_alpha = value;
+			
+			// current alpha value of root part could be modifiable but has no index of relative array.
+			if (_vIndex < 0) return;
+			
 			if (_useCgShader && ColorBlendType != SsColorBlendOperation.Non)
 			{
 				for (int i = 0; i < 4; ++i)
@@ -284,72 +288,77 @@ public class SsPart : IComparable<SsPart>
 #if _MAKE_ROOT_TO_LOCAL_TRANSFORM
 		_rotChanged	= false;
 #endif
-		// not any normal types don't require a material, colors, and vertices.
-		if (_res.Type != SsPartType.Normal
-		&&	_res.Type != SsPartType.Bound)
-			return;
-		
-		// shortcut
-#if _USE_UNIFIED_SHADER
-		_useUnifiedShader = _res.imageFile.useUnifiedShader;
-#endif
-		_useCgShader = (SystemInfo.graphicsShaderLevel >= 20);
+		_alpha		= 1;
 
-		if (_res.Type == SsPartType.Bound)
+		// not any normal types don't require a material, colors, and vertices.
+		if (_res.Type == SsPartType.Normal
+		||	_res.Type == SsPartType.Bound)
 		{
-#if !_BOUND_PART_DRAW_AS_INVALID
-			// set vertex color to transparent red.
-			// this alpha value will be overwritten in AlphaValue property later.
-			_vertexColor = new Color(1,0,0,1);
-			for (int i = 0; i < 4; ++i)
+			// shortcut
+	#if _USE_UNIFIED_SHADER
+			_useUnifiedShader = _res.imageFile.useUnifiedShader;
+	#endif
+			_useCgShader = (SystemInfo.graphicsShaderLevel >= 20);
+	
+			if (_res.Type == SsPartType.Bound)
 			{
-				// set UVs to a point at left-top.
-				_mgr._uvs[_vIndex + i] = Vector2.zero;
-		
-				// set vertex colors
-				_mgr._colors[_vIndex + i] = _vertexColor;
+	#if !_BOUND_PART_DRAW_AS_INVALID
+				// set vertex color to transparent red.
+				// this alpha value will be overwritten in AlphaValue property later.
+				_vertexColor = new Color(1,0,0,1);
+				for (int i = 0; i < 4; ++i)
+				{
+					// set UVs to a point at left-top.
+					_mgr._uvs[_vIndex + i] = Vector2.zero;
+			
+					// set vertex colors
+					_mgr._colors[_vIndex + i] = _vertexColor;
+				}
+				// invisible is default.
+				_visible = false;
+	#else
+				_visible = _mgr.DrawBoundingParts;
+	#endif
 			}
-			// invisible is default.
-			_visible = false;
-#else
-			_visible = _mgr.DrawBoundingParts;
-#endif
-		}
-		else
-		{
-			// default vertex color
-			_vertexColor = new Color(1,1,1,1);
-			for (int i = 0; i < 4; ++i)
+			else
 			{
-				// set UVs. use precalculated UVs, it is stored clockwise
-				_mgr._uvs[_vIndex + i] = _res.UVs[i];
-		
-				// set vertex colors
-				_mgr._colors[_vIndex + i] = _vertexColor;
+				// default vertex color
+				_vertexColor = new Color(1,1,1,1);
+				for (int i = 0; i < 4; ++i)
+				{
+					// set UVs. use precalculated UVs, it is stored clockwise
+					_mgr._uvs[_vIndex + i] = _res.UVs[i];
+			
+					// set vertex colors
+					_mgr._colors[_vIndex + i] = _vertexColor;
+				}
+				// set blend type and _shaderType
+				ColorBlendType = SsColorBlendOperation.Non;
 			}
-			// set blend type and _shaderType
-			ColorBlendType = SsColorBlendOperation.Non;
 		}
 		
+		// set flag indicates the need to update alpha.
+		_hasTransparency = _res.HasTrancparency
+			|| (_parent != null && _res.Inherits(SsKeyAttr.Trans));// always inherits parent's alpha whether the immediate parent has transparency or not. 2012.12.19 bug fixed
+
+		// set alpha value
+		AlphaValue = _res.Trans(0);
+
 		// set boolean about having transparency
 		if (_res.Type == SsPartType.Bound)
 		{
-#if _BOUND_PART_DRAW_AS_INVALID
+	#if _BOUND_PART_DRAW_AS_INVALID
 			// become purple that mean invalid.
 			_material = null;
-#else
+	#else
 			// needs any appropriate material
 			_hasTransparency = true;
 			AlphaValue = 0.5f;
-#endif
+	#endif
 		}
 		else
+		if (_res.Type == SsPartType.Normal)
 		{
-			_hasTransparency = _res.HasTrancparency
-				|| (_parent != null && _res.Inherits(SsKeyAttr.Trans));// always inherits parent's alpha whether the immediate parent has transparency or not. 2012.12.19 bug fixed
-			// set alpha value
-			AlphaValue = _res.Trans(0);
-
 			// set appropriate material. _shaderType was set inside ColorBlendType property.
 			_material = imageFile.GetMaterial(_shaderType);
 		}
@@ -357,14 +366,18 @@ public class SsPart : IComparable<SsPart>
 		//--------- calculates various info...
 		Update(true);
 
-		// set triangle indices. never changed so far.
-#if _USE_TRIANGLE_STRIP
-		_triIndices = new int[]{_vIndex+0,_vIndex+1,_vIndex+3,_vIndex+2};// order is LT->RT->LB->RB.
-#else
-		_triIndices = new int[]{_vIndex+0,_vIndex+1,_vIndex+2,_vIndex+2,_vIndex+3,_vIndex+0};	// order is LT->RT->RB->RB->LB->LT
-#endif
-		
-		SetToSubmeshArray(_index - 1);
+		if (_res.Type == SsPartType.Normal
+		||	_res.Type == SsPartType.Bound)
+		{
+			// set triangle indices. never changed so far.
+	#if _USE_TRIANGLE_STRIP
+			_triIndices = new int[]{_vIndex+0,_vIndex+1,_vIndex+3,_vIndex+2};// order is LT->RT->LB->RB.
+	#else
+			_triIndices = new int[]{_vIndex+0,_vIndex+1,_vIndex+2,_vIndex+2,_vIndex+3,_vIndex+0};	// order is LT->RT->RB->RB->LB->LT
+	#endif
+			
+			SetToSubmeshArray(_index - 1);
+		}
 	}
 	
 	internal void
@@ -530,19 +543,14 @@ public class SsPart : IComparable<SsPart>
 		}
 		
 		// transparency
-		if (_hasTransparency)
+		if (_hasTransparency
+		|| (res != _res && res.HasTrancparency))
 		{
 			float nowAlpha = res.Trans(frame);
 			if (_parent != null && res.Inherits(SsKeyAttr.Trans))
 			{
-				float parentAlpha;
-				// if parent is root, it doesn't have material.
-				if (_parent._material == null)
-					parentAlpha = _parent._res.Trans(frame);
-				else
-					parentAlpha = _parent.AlphaValue;
-				// just multiply simply 
-				nowAlpha = parentAlpha * nowAlpha;
+				// just multiply simply with parent's value if this part needs to inherit.
+				nowAlpha = _parent.AlphaValue * nowAlpha;
 			}
 			if (_forceAlphaAvailable)
 				nowAlpha = _forceAlpha;

@@ -6,6 +6,12 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+[Ver.1.28b4] (2014/2/12)
+  - Fixed an issue that alpha animation of Root/NULL parts in sub anime can't be applied to main anime.
+  - Fixed an issue that normal part always refer to itself alpha value in main anime if its parent is NULL or root part.
+    As a result, the normal part can never inherit grandparent's alpha value.
+  - Fixed an issue that Root/NULL parts don't get applied an animation at first frame if they are drawn before Update function is called.
+
 [Ver.1.28b3] (2014/1/29)
   - Fixed an issue that a rotation animation plays with chattering if the difference between keyframes is a subtle under about 3.6 degree.
 

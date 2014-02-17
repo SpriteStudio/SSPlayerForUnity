@@ -6,6 +6,13 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+[Ver.1.28b5] (2014/2/17)
+  - Added an option that "Refers to individual inheritance value for Root part." in SpriteStudio -> Settings.
+    For Ver.4 compatibility, H/V flip, hide flags don't always inherit, and others always do before,
+    But now can refer to the individual inheritance settings.
+    As a result, an inherited animation represents as OPTPiX SpriteStudio 5 compatible.
+  - Fixed an issue that hide keys of NULL part are not operated except first key.
+  - Fixed an issue that hide key of Root part doesn't influence its children.
 [Ver.1.28b4] (2014/2/12)
   - Fixed an issue that alpha animation of Root/NULL parts in sub anime can't be applied to main anime.
   - Fixed an issue that normal part always refer to itself alpha value in main anime if its parent is NULL or root part.

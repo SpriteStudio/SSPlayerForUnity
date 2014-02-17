@@ -413,6 +413,7 @@ public class SsaxImporter
 				partBase.Type = SsPartType.Root;
 				partBase.MyId = 0;
 				partBase.ParentId = -1;
+				partBase.InheritState.Type = _database.RefersToIndividualInheritValueForRootPart ? SsInheritanceType.Self : SsInheritanceType.Parent;
 			}
 			else
 			{
@@ -429,7 +430,7 @@ public class SsaxImporter
 				partBase.SrcObjId			= _ToInt(_GetNodeValue(part, "./cur:PicID"));
 				partBase.AlphaBlendType		= (SsAlphaBlendOperation)(1 + _ToInt(_GetNodeValue(part, "./cur:TransBlendType")));
 				partBase.InheritState.Type	= (SsInheritanceType)_ToInt(_GetNodeValue(part, "./cur:InheritType"));
-			
+
 				if (partBase.SrcObjId >= _anmRes.ImageList.Length)
 				{
 					/*
@@ -513,29 +514,26 @@ public class SsaxImporter
 				}
 
 				// set inheritance parameter to part instance.
-				if (partBase.Type != SsPartType.Root)
+				if (partBase.InheritState.Type == SsInheritanceType.Self)
 				{
-					if (partBase.InheritState.Type == SsInheritanceType.Self)
+					// has its own value.
+					var InheritParam = new SsInheritanceParam();
+					XmlNode InheritNode = attrNode.Attributes.GetNamedItem("Inherit");
+					if (InheritNode != null)
 					{
-						// has its own value.
-						var InheritParam = new SsInheritanceParam();
-						XmlNode InheritNode = attrNode.Attributes.GetNamedItem("Inherit");
-						if (InheritNode != null)
-						{
-							// mix my value and parent's value, but actually user 100% parent's...
-							InheritParam.Use = true;
-							InheritParam.Rate = (100 * _ToInt(InheritNode.Value)) / SSIO_SUCCEED_DENOMINATOR;
-						}
-						else
-						{
-							// absolutely not refer the parent's value.
-							InheritParam.Use = false;
-							InheritParam.Rate = 0;
-						}
-						// apply to part
-						partBase.InheritState.Values[(int)attrDesc.Attr] = InheritParam;
-						//Debug.LogError(partBase.Name +" has own value! attr:" + attrDesc.Attr + " use:" + InheritParam.Use);
+						// mix my value and parent's value, but actually user 100% parent's...
+						InheritParam.Use = true;
+						InheritParam.Rate = (100 * _ToInt(InheritNode.Value)) / SSIO_SUCCEED_DENOMINATOR;
 					}
+					else
+					{
+						// absolutely not refer the parent's value.
+						InheritParam.Use = false;
+						InheritParam.Rate = 0;
+					}
+					// apply to part
+					partBase.InheritState.Values[(int)attrDesc.Attr] = InheritParam;
+					//Debug.LogError(partBase.Name +" has own value! attr:" + attrDesc.Attr + " use:" + InheritParam.Use);
 				}
 				
 				// enumerate keys

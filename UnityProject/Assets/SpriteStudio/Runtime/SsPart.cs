@@ -407,7 +407,10 @@ public class SsPart : IComparable<SsPart>
 		if (_forceVisibleAvailable)
 			v = _forceVisible;
 #endif
-		
+
+		// avoid Root and NULL part
+		if (_triIndices == null) return;
+
 #if _USE_TRIANGLE_STRIP
 		_mesh.SetTriangleStrip(v ? _triIndices : null, _subMeshIndex);
 #else
@@ -471,7 +474,6 @@ public class SsPart : IComparable<SsPart>
 				_visible = !res.Hide(frame);
 			}
 			else
-			if (res.Type == SsPartType.Normal)
 			{
 				bool nowVisible;
 				if (res.IsBeforeFirstKey(frame))
@@ -479,8 +481,7 @@ public class SsPart : IComparable<SsPart>
 				else
 				{
 					if	(_parent != null
-					&&	!_parent._res.IsRoot
-					&&	(res.InheritRate(SsKeyAttr.Hide) > 0.5f))
+					&&	res.InheritRate(SsKeyAttr.Hide) > 0.5f)
 						nowVisible = _parent._visible;
 					else
 						nowVisible = !res.Hide(frame);

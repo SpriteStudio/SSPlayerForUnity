@@ -21,7 +21,7 @@ public class SsEditorWindow : EditorWindow
 	[MenuItem("SpriteStudio/Settings...")]
 	static  public void Init()
 	{
-		EditorWindow.GetWindowWithRect<SsEditorWindow>(new Rect(0,0,400,100), true, "SpriteStudio Settings");
+		EditorWindow.GetWindowWithRect<SsEditorWindow>(new Rect(0,0,400,300), true, "SpriteStudio Settings");
 		// get current settings from database.
 		_database = SsAssetPostProcessor.GetDatabase();
 	}
@@ -42,6 +42,16 @@ public class SsEditorWindow : EditorWindow
 			EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField("Interpret angle curve parameter as radian", GUILayout.Width(250));
 				_database.AngleCurveParamAsRadian = EditorGUILayout.Toggle(_database.AngleCurveParamAsRadian);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField("Refers to individual inheritance value for Root part.", GUILayout.Width(300));
+				_database.RefersToIndividualInheritValueForRootPart = EditorGUILayout.Toggle(_database.RefersToIndividualInheritValueForRootPart);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField("  * Needs Reimport animations to apply this setting.");
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField("  * OPTPiX SpriteStudio 5 compatible if checked.");
 			EditorGUILayout.EndHorizontal();
 		}
 		GUILayout.Space(12);
@@ -87,7 +97,7 @@ public class SsEditorWindow : EditorWindow
 	static public void AboutSpriteStudio()
 	{
 		EditorUtility.DisplayDialog("About SpriteStudioPlayer",
-		                            "SpriteStudioPlayer Version 1.28b4\n" +
+		                            "SpriteStudioPlayer Version 1.28b5\n" +
 		                            "Ssax File Version " + SsVersion.ToString(SsaxImporter.CurrentVersion) + "\n" +
 		                            "Copyright(C) Web Technology Corp.",
 		                            "Ok");

@@ -6,6 +6,9 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+[Ver.1.28f1] (2014/2/22)
+  - Updated sample .asset files on Unity 3.5.7f6.
+
 [Ver.1.28b5] (2014/2/17)
   - Added an option that "Refers to individual inheritance value for Root part." in SpriteStudio -> Settings.
     For Ver.4 compatibility, H/V flip, hide flags don't always inherit, and others always do before,

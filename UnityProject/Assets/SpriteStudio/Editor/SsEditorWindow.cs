@@ -97,7 +97,7 @@ public class SsEditorWindow : EditorWindow
 	static public void AboutSpriteStudio()
 	{
 		EditorUtility.DisplayDialog("About SpriteStudioPlayer",
-		                            "SpriteStudioPlayer Version 1.28f1\n" +
+		                            "SpriteStudioPlayer Version 1.29b1\n" +
 		                            "Ssax File Version " + SsVersion.ToString(SsaxImporter.CurrentVersion) + "\n" +
 		                            "Copyright(C) Web Technology Corp.",
 		                            "Ok");

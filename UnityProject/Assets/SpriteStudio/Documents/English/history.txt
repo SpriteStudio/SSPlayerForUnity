@@ -6,6 +6,10 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+[Ver.1.29b1] (2014/3/11)
+  [不具合修正]
+  - Fixed an issue that ScaleFactor is not applied to X/Y pivot offset values when imported.
+  
 [Ver.1.28f1] (2014/2/22)
   - Updated sample .asset files on Unity 3.5.7f6.
 

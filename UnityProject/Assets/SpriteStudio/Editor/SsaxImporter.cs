@@ -404,6 +404,9 @@ public class SsaxImporter
 			
 			XmlAttribute rootAttr = part.Attributes["Root"];
 
+			int partWidth = 0;
+			int partHeight = 0;
+			
 			partBase.InheritState.Initialize(4, _anmRes.hvFlipForImageOnly);
 			string partName = _GetNodeValue(part, "./cur:Name");
 			partBase.Name = System.String.Copy(partName);
@@ -430,6 +433,9 @@ public class SsaxImporter
 				partBase.SrcObjId			= _ToInt(_GetNodeValue(part, "./cur:PicID"));
 				partBase.AlphaBlendType		= (SsAlphaBlendOperation)(1 + _ToInt(_GetNodeValue(part, "./cur:TransBlendType")));
 				partBase.InheritState.Type	= (SsInheritanceType)_ToInt(_GetNodeValue(part, "./cur:InheritType"));
+
+				partWidth = partBase.PicArea.Right - partBase.PicArea.Left;
+				partHeight = partBase.PicArea.Bottom - partBase.PicArea.Top;
 
 				if (partBase.SrcObjId >= _anmRes.ImageList.Length)
 				{
@@ -576,6 +582,16 @@ public class SsaxImporter
 									case SsKeyAttr.PosY:
 										// apply scale factor
 										intKey.Value = (int)((float)intKey.Value * _anmRes.ScaleFactor);
+										break;
+									case SsKeyAttr.OriginOffsetX:
+										// apply scale factor
+										if (intKey.Value != partWidth / 2)
+											intKey.Value = (int)((float)intKey.Value * _anmRes.ScaleFactor);
+										break;
+									case SsKeyAttr.OriginOffsetY:
+										// apply scale factor
+										if (intKey.Value != partHeight / 2)
+											intKey.Value = (int)((float)intKey.Value * _anmRes.ScaleFactor);
 										break;
 #if _FORCE_BOUND_PART_TO_MOST_TOP
 									// force bound part to most top to draw surely if wanted

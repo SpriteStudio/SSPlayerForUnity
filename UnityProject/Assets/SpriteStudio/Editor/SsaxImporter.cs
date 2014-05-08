@@ -578,11 +578,6 @@ public class SsaxImporter
 									
 									switch (attrDesc.Attr)
 									{
-									case SsKeyAttr.PosX:
-									case SsKeyAttr.PosY:
-										// apply scale factor
-										intKey.Value = (int)((float)intKey.Value * _anmRes.ScaleFactor);
-										break;
 									case SsKeyAttr.OriginOffsetX:
 										// apply scale factor
 										if (intKey.Value != partWidth / 2)
@@ -620,6 +615,14 @@ public class SsaxImporter
 									// unnecessary to convert to radian. because Unity requires degree unit.
 									//if (attrDesc.CastType == SsKeyCastType.Degree)
 										//floatKey.Value = (float)_DegToRad( _ToDouble(strValue) );
+									switch (attrDesc.Attr)
+									{
+									case SsKeyAttr.PosX:
+									case SsKeyAttr.PosY:
+										// apply scale factor
+										floatKey.Value = floatKey.Value * _anmRes.ScaleFactor;
+										break;
+									}
 									keyBase = floatKey;
 									break;
 								}

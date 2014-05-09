@@ -115,7 +115,7 @@ public class SsPart : IComparable<SsPart>
 	public	Matrix4x4		RootToPartMatrix {
 		get {return _pivotMatrix;}
 	}
-	Vector3[]				_orgVertices;
+	internal Vector3[]		_orgVertices;
 	
 	internal Vector3[]		_vertPositions;
 	int[]		_triIndices;

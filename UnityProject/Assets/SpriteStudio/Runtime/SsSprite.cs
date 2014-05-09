@@ -199,7 +199,20 @@ public class SsSprite : MonoBehaviour
 
 		// replace parts resources
 		for (int i = 0; i < _parts.Length; ++i)
-			_parts[i]._res = _partResList[i];
+		{
+			SsPart p = _parts[i];
+			p._res = _partResList[i];
+			
+			// initialize scale and vertex modification status.
+			p._scale = Vector3.one;
+			if (p._vertPositions != null)
+			{
+				for (int k = 0; k < p._vertPositions.Length; ++k)
+				{
+					p._vertPositions[k] = p._orgVertices[k] = p._res.OrgVertices[k];
+				}
+			}
+		}
 
 		// must invoke vertex update to display initial posed animation.
 		_vertChanged = true;

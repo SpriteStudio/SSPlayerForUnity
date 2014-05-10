@@ -381,6 +381,77 @@ public class SsPart : IComparable<SsPart>
 	}
 	
 	internal void
+	ReplaceResource(
+		SsPartRes	partRes,	///< part resource
+		SsImageFile	imageFile)	///< source image path, texture and material.
+	{
+		_res = partRes;
+			
+		// attach parent's transform to inherit its SRT.
+		_pivotMatrix = Matrix4x4.identity;
+		switch (_res.Type)
+		{
+		case SsPartType.Normal:
+		case SsPartType.Bound:
+			// each vertices are attached to pivot
+			for (int i = 0; i < _vertPositions.Length; ++i)
+			{
+				_orgVertices[i] = _vertPositions[i] = _res.OrgVertices[i];
+			}
+			_curPicArea = _res.PicArea;
+			break;
+		}
+
+		// set startup value
+		_visible	= !_res.Hide(0);
+		_flipH		= false;
+		_flipV		= false;
+		_pos		= Vector3.zero;
+		_ang		= 0;
+		_quaternion	= Quaternion.identity;
+		_scale		= Vector3.one;
+#if _MAKE_ROOT_TO_LOCAL_TRANSFORM
+		_rotChanged	= false;
+#endif
+		_alpha		= 1;
+
+		// not any normal types don't require a material, colors, and vertices.
+		if (_res.Type == SsPartType.Normal)
+		{
+			// default vertex color
+			_vertexColor = new Color(1,1,1,1);
+			for (int i = 0; i < 4; ++i)
+			{
+				// set UVs. use precalculated UVs, it is stored clockwise
+				_mgr._uvs[_vIndex + i] = _res.UVs[i];
+		
+				// set vertex colors
+				_mgr._colors[_vIndex + i] = _vertexColor;
+			}
+			// set blend type and _shaderType
+			ColorBlendType = SsColorBlendOperation.Non;
+		}
+		
+		// set flag indicates the need to update alpha.
+		_hasTransparency = _res.HasTrancparency
+			|| (_parent != null && _res.Inherits(SsKeyAttr.Trans));// always inherits parent's alpha whether the immediate parent has transparency or not. 2012.12.19 bug fixed
+
+		// set alpha value
+		AlphaValue = _res.Trans(0);
+
+		if (_res.Type == SsPartType.Normal)
+		{
+			// set appropriate material. _shaderType was set inside ColorBlendType property.
+			var m = imageFile.GetMaterial(_shaderType);
+			if (m != _material)
+			{
+				_material = m;
+				_mgr._matChanged = true;
+			}
+		}
+	}
+	
+	internal void
 	SetToSubmeshArray(int index)
 	{
 #if _INHERITS_FORCE_VISIBLE

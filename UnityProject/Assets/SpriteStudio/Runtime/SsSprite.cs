@@ -200,17 +200,18 @@ public class SsSprite : MonoBehaviour
 		// replace parts resources
 		for (int i = 0; i < _parts.Length; ++i)
 		{
-			SsPart p = _parts[i];
-			p._res = _partResList[i];
+			if (i >= _partResList.Length)
+				break;
 			
-			// initialize scale and vertex modification status.
-			p._scale = Vector3.one;
-			if (p._vertPositions != null)
+			SsPartRes partRes = _partResList[i];
+			SsImageFile image = partRes.IsRoot ? null : _imageList[partRes.SrcObjId];
+			
+			_parts[i].ReplaceResource(partRes, image);
+			
+			if (i >= 1)
 			{
-				for (int k = 0; k < p._vertPositions.Length; ++k)
-				{
-					p._vertPositions[k] = p._orgVertices[k] = p._res.OrgVertices[k];
-				}
+				// update material buffer
+				_materials[i - 1] = _parts[i]._material;
 			}
 		}
 
@@ -219,7 +220,7 @@ public class SsSprite : MonoBehaviour
 		
 		// also must update uv
 		_uvChanged = true;
-		
+				
 		// reflect blend settings to shader
 		_extraChanged = true;
 			

@@ -221,6 +221,9 @@ public class SsSprite : MonoBehaviour
 		// also must update uv
 		_uvChanged = true;
 				
+		// also may update priority
+		_prioChanged = true;
+				
 		// reflect blend settings to shader
 		_extraChanged = true;
 			

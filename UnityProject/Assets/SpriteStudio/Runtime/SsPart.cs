@@ -20,7 +20,13 @@
 
 // inherits hide status when forced visible is available.
 #define _INHERITS_FORCE_VISIBLE
-	
+
+/**
+ * this is the option to playback the animation created by SS5 without checking
+ * "Flip ZRot sign when the part is flipped by negative scale.(Ver.4 compatible)" in Export setting.
+ */
+//#define _DONT_FLIP_Z_ANGLE_SIGN_FOR_FLIPPED_PARTS_BY_NEGATIVE_SCALE
+
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -645,6 +651,9 @@ public class SsPart : IComparable<SsPart>
 		if (res.HasAttrFlags(SsKeyAttrFlags.Angle))
 		{
 			var ang = res.Angle(frame);
+
+#if _DONT_FLIP_Z_ANGLE_SIGN_FOR_FLIPPED_PARTS_BY_NEGATIVE_SCALE
+#else
 			// SpriteStudio demands me to Z axis rotation consistently.
 			if (_parent)
 			{
@@ -653,6 +662,7 @@ public class SsPart : IComparable<SsPart>
 					ang *= -1;
 				if (_mgr.hFlip ^ _mgr.vFlip) ang *= -1;
 			}
+#endif
 			// changed comparison from quaternion to Eular angle value to prevent missing update from exquisite moving.
 			if (ang != _ang)
 			{

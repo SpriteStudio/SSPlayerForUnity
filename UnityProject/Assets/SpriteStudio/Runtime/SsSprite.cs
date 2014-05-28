@@ -736,6 +736,9 @@ public class SsSprite : MonoBehaviour
 		_mesh.vertices	= _vertices;
 		_mesh.uv		= _uvs;
 
+		// update uv just in case
+		_uvChanged = true;
+
 		// at first time must invoke vertex update to display initial posed animation.
 		_vertChanged = true;
 		

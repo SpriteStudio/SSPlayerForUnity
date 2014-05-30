@@ -283,6 +283,13 @@ public class SsaxImporter
 				_anmRes.hvFlipForImageOnly = true;
 			else
 				_anmRes.hvFlipForImageOnly = _ToBool(n.InnerText);
+
+			n = _SelectSingleNode(optionNode, "cur:NotInvertedAngleValueSign");
+			if (n == null)
+				_anmRes.notInvertedAngleValueSign = false;
+			else
+				_anmRes.notInvertedAngleValueSign = _ToBool(n.InnerText);
+
 		}
 		
 		// create image manager singleton

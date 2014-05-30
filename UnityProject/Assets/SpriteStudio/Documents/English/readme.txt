@@ -3,7 +3,7 @@
 
   Introduction
 
- Copyright(C) 2003-2013 Web Technology Corp.
+ Copyright(C) Web Technology Corp.
 ========================================================================
 
 Thank you for choosing SpriteStudioPlayer for Unity.
@@ -107,7 +107,7 @@ Please read this document before using SpriteStudioPlayer for Unity.
 ============================================================================
 Web Technology Corp.
 http://www.webtech.co.jp/eng/
-Copyright(C) 2003-2013 Web Technology Corp.
+Copyright(C) Web Technology Corp.
 ============================================================================
 
 * 'SpriteStudio' and 'Web Technology' are registered trademarks of

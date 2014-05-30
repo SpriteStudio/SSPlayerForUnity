@@ -3,7 +3,7 @@
 
   お読みください
 
- Copyright(C) 2003-2013 Web Technology Corp.
+ Copyright(C) Web Technology Corp.
 =============================================================================
 
 このたびは SpriteStudioPlayer for Unity をご利用いただきまして、誠に
@@ -214,7 +214,7 @@ SpriteStudioPlayer for Unity を使用する前に、本テキストをお読み
 =============================================================================
 株式会社ウェブテクノロジ
 http://www.webtech.co.jp/
-Copyright(C) 2003-2013 Web Technology Corp.
+Copyright(C) Web Technology Corp.
 =============================================================================
 
 * SpriteStudio, Web Technologyは、株式会社ウェブテクノロジの登録商標です。

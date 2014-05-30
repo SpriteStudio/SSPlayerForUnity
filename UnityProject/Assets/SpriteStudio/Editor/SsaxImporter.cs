@@ -854,7 +854,7 @@ public class SsaxImporter
 			if (_precalcAttrValues)
 			{
 				// precalculate attribute values each frame
-				partBase.CreateAttrValues(_anmRes.EndFrame + 1);
+				partBase.CreateAttrValues(_anmRes.EndFrame + 1, _database);
 			}
 
 			// add to list

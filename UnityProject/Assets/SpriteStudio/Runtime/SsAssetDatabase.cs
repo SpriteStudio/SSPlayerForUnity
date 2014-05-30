@@ -20,6 +20,7 @@ public class SsAssetDatabase : MonoBehaviour
 	[HideInInspector]	public	float	ScaleFactor = 1f;
 	[HideInInspector]	public	bool	AngleCurveParamAsRadian = true;
 	[HideInInspector]	public	bool	RefersToIndividualInheritValueForRootPart = true;	// if true, refers to individual inheritance settings on SS5, otherwise always refers to default settings as SS4.
+	[HideInInspector]	public	bool	NotIntegerizeInterpolatotedXYValues = true;
 #if _BUILD_UNIFIED_SHADERS
 	public	bool	UseUnifiedShader = false;
 #endif

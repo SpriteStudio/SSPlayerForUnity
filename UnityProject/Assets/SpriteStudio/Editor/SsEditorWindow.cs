@@ -38,20 +38,30 @@ public class SsEditorWindow : EditorWindow
 #if _BUILD_UNIFIED_SHADERS
 			_database.UseUnifiedShader = EditorGUILayout.Toggle("Use UnifiedShader", _database.UseUnifiedShader);
 #endif
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("* Needs Reimport animations to apply these settings.");
+			EditorGUILayout.EndHorizontal();
+
 			_database.ScaleFactor = EditorGUILayout.FloatField("Scale Factor", _database.ScaleFactor);
 			EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField("Interpret angle curve parameter as radian", GUILayout.Width(250));
 				_database.AngleCurveParamAsRadian = EditorGUILayout.Toggle(_database.AngleCurveParamAsRadian);
 			EditorGUILayout.EndHorizontal();
+
 			EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField("Refers to individual inheritance value for Root part.", GUILayout.Width(300));
 				_database.RefersToIndividualInheritValueForRootPart = EditorGUILayout.Toggle(_database.RefersToIndividualInheritValueForRootPart);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField("  * Needs Reimport animations to apply this setting.");
+				EditorGUILayout.LabelField("  * OPTPiX SpriteStudio 5 compatible if checked.");
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("Not integerize interpolated X/Y position values.", GUILayout.Width(300));
+			_database.NotIntegerizeInterpolatotedXYValues = EditorGUILayout.Toggle(_database.NotIntegerizeInterpolatotedXYValues);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.LabelField("  * OPTPiX SpriteStudio 5 compatible if checked.");
+			EditorGUILayout.LabelField("  * OPTPiX SpriteStudio 5 compatible if checked.");
 			EditorGUILayout.EndHorizontal();
 		}
 		GUILayout.Space(12);
@@ -97,7 +107,7 @@ public class SsEditorWindow : EditorWindow
 	static public void AboutSpriteStudio()
 	{
 		EditorUtility.DisplayDialog("About SpriteStudioPlayer",
-		                            "SpriteStudioPlayer Version 1.29b4 (float pos)\n" +
+		                            "SpriteStudioPlayer Version 1.29b4\n" +
 		                            "Ssax File Version " + SsVersion.ToString(SsaxImporter.CurrentVersion) + "\n" +
 		                            "Copyright(C) Web Technology Corp.",
 		                            "Ok");

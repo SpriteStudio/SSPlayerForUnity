@@ -346,7 +346,7 @@ public class SsPartRes
 	
 	// precalculate attribute values each frame to decrease runtime cost
 	public void
-	CreateAttrValues(int frameNum)
+	CreateAttrValues(int frameNum, SsAssetDatabase database)
 	{
 		if (frameNum <= 0)
 		{
@@ -548,7 +548,13 @@ public class SsPartRes
 							else if (intValue)
 								intValue.Value = System.Convert.ToInt32(res);
 							else if (floatValue)
-								floatValue.Value = System.Convert.ToSingle(res);
+							{
+								if ((attrDesc.Attr == SsKeyAttr.PosX || attrDesc.Attr == SsKeyAttr.PosY)
+								&&	!database.NotIntegerizeInterpolatotedXYValues)
+									floatValue.Value = System.Convert.ToInt32(res);
+								else
+									floatValue.Value = System.Convert.ToSingle(res);
+							}
 							else
 								v.SetValue(res);
 						}catch{

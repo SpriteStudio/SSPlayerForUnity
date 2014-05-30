@@ -6,8 +6,22 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+[Ver.1.29b4] (2014/5/30)
+  [NOTICE]
+  - This version includes some essential changes, X/Y postions are now decimal and the variable for a new option.
+    So you need to reimport all of your ssax files to playback existing SsAnimation assets correctly.
+
+  - Added an option to not integerize interpolated X/Y position values.
+    Some chattered motions can be improved if checked. (OPTPiX SpriteStudio 5 compatibility)
+  
+  - Supported the ssax file which was exported with the option "Flip ZRot sign when the part is flipped by negative scale.(Ver.4 compatible)" unchecked in OPTPiX SpriteStudio 5 export settings.
+    As a result, Z rotated children under animated scale can be playback as the same in OPTPiX SpriteStudio.
+  
+  - Fixed an issue that an out of range exception occurs when TimeScale is so higher.
+  
+  - Fixed an issue that the parts are not initialized correctly when the all values of XYWH image offset keyframe at zero frame are zero.
+
 [Ver.1.29b1] (2014/3/11)
-  [不具合修正]
   - Fixed an issue that ScaleFactor is not applied to X/Y pivot offset values when imported.
   
 [Ver.1.28f1] (2014/2/22)

@@ -155,7 +155,7 @@
 =============================================================================
 Web Technology Corp.
 http://www.webtech.co.jp/eng/
-Copyright(C) 2003-2013 Web Technology Corp.
+Copyright(C) Web Technology Corp.
 =============================================================================
 
 * 'SpriteStudio' and 'Web Technology' are registered trademarks of

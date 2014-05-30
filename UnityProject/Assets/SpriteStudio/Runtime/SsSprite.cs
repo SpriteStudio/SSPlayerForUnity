@@ -1107,6 +1107,12 @@ public class SsSprite : MonoBehaviour
 						_animeFrame = _endAnimeFrame + 1 - overrun; // 2012.02.05 cares about last frame
 					else if (_animeFrame > _endAnimeFrame)
 						_animeFrame = _startAnimeFrame + overrun;
+
+					// fixed overrun when timescale is higher
+					if (_animeFrame < _startAnimeFrame)
+						_animeFrame = _endAnimeFrame;
+					if (_animeFrame >= _endAnimeFrame + 1)
+						_animeFrame = _startAnimeFrame;
 				}
 			}
 			

@@ -6,6 +6,9 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+[Ver.1.29f1] (2014/6/9)
+  - Moved SpriteStudio menu to under Tools menu for AssetStore regulation.
+  
 [Ver.1.29b4] (2014/5/30)
   [NOTICE]
   - This version includes some essential changes, X/Y postions are now decimal and the variable for a new option.

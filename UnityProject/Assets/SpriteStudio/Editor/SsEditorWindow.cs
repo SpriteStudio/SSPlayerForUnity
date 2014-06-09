@@ -18,7 +18,7 @@ public class SsEditorWindow : EditorWindow
 	static SsAssetDatabase	_database;
 	static SsSprite			_lastSprite;
 
-	[MenuItem("SpriteStudio/Settings...")]
+	[MenuItem("Tools/SpriteStudio/Settings...")]
 	static  public void Init()
 	{
 		EditorWindow.GetWindowWithRect<SsEditorWindow>(new Rect(0,0,400,300), true, "SpriteStudio Settings");
@@ -103,11 +103,11 @@ public class SsEditorWindow : EditorWindow
 		SsAssetPostProcessor.AddShaderKeeperToCurrentScene();
 	}
 
-	[MenuItem("SpriteStudio/About")]
+	[MenuItem("Tools/SpriteStudio/About")]
 	static public void AboutSpriteStudio()
 	{
 		EditorUtility.DisplayDialog("About SpriteStudioPlayer",
-		                            "SpriteStudioPlayer Version 1.29b4\n" +
+		                            "SpriteStudioPlayer Version 1.29f1\n" +
 		                            "Ssax File Version " + SsVersion.ToString(SsaxImporter.CurrentVersion) + "\n" +
 		                            "Copyright(C) Web Technology Corp.",
 		                            "Ok");

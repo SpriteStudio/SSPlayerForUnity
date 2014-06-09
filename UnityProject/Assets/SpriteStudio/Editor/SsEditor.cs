@@ -13,7 +13,7 @@ using UnityEditor;
 public class SsEditor : Editor
 {
 	// Add main menu newly
-    [MenuItem ("SpriteStudio/Create Sprite")]
+    [MenuItem ("Tools/SpriteStudio/Create Sprite")]
     static void
 	SSMenu_CreateSprite()
 	{
@@ -21,7 +21,7 @@ public class SsEditor : Editor
     }
 
 	// Add Database under main menu
-	[MenuItem ("SpriteStudio/Create Database")]
+	[MenuItem ("Tools/SpriteStudio/Create Database")]
     static void
 	SSMenu_CreateDatabase(MenuCommand command)
 	{
@@ -29,7 +29,7 @@ public class SsEditor : Editor
     }
 
 	// Add this under main menu
-	[MenuItem ("SpriteStudio/Cleanup Prefabs")]
+	[MenuItem ("Tools/SpriteStudio/Cleanup Prefabs")]
     static void
 	SSMenu_CleanupPrafabs(MenuCommand command)
 	{

@@ -39,8 +39,8 @@ public class SsSubAnimeController
 	public	float		Speed = 1;
 	public	int			PlayCount = 0;
 	public	int			CurrentPlayCount = 0;
-	public	bool		BindsToAllParts = false; ///< binds to all parts in the main animation except root part
-	public	bool		BindsByPartName = false; ///< binds part by name or index
+	public	bool		BindsToAllParts = false; //!< binds to all parts in the main animation except root part
+	public	bool		BindsByPartName = false; //!< binds part by name or index
 	public	bool		IsPlaying = true;
 
 	public	void		Play()

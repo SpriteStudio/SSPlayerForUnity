@@ -52,7 +52,7 @@ public class SsPart : IComparable<SsPart>
 	internal	SsPart		_parent;
 
 	//--------- statuses
-	internal	int			_priority;	///< draw order priority. earlier -128 <= +127 later
+	internal	int			_priority;	//!< draw order priority. earlier -128 <= +127 later
 	internal	bool		_visible;
 	
 	bool _forceVisibleAvailable = false;
@@ -90,15 +90,15 @@ public class SsPart : IComparable<SsPart>
 	{
 		_forceAlphaAvailable = false;
 	}	
-	internal	Vector3		_pos;			///< local position
-	internal	float		_ang;			///< local eular angle for finding exquiste angle change.
-	internal	Quaternion	_quaternion;	///< local rotation
-	internal	Vector3		_scale;			///< local scale
+	internal	Vector3		_pos;			//!< local position
+	internal	float		_ang;			//!< local eular angle for finding exquiste angle change.
+	internal	Quaternion	_quaternion;	//!< local rotation
+	internal	Vector3		_scale;			//!< local scale
 #if _MAKE_ROOT_TO_LOCAL_TRANSFORM
-	internal	Quaternion	_rootSpaceQuaternion;	///< root space rotation
+	internal	Quaternion	_rootSpaceQuaternion;	//!< root space rotation
 	internal	bool		_rotChanged;
 #endif
-	internal	Transform 	_transform;		///< my transform. created by user when needed.
+	internal	Transform 	_transform;		//!< my transform. created by user when needed.
 
 	//--------- settings
  	internal	Material	_material;
@@ -119,8 +119,8 @@ public class SsPart : IComparable<SsPart>
 	
 	internal Vector3[]		_vertPositions;
 	int[]		_triIndices;
-	int			_index;		///< index of parts
-	int			_vIndex;	///< actual index in vertex/color/uv buffers.
+	int			_index;		//!< index of parts
+	int			_vIndex;	//!< actual index in vertex/color/uv buffers.
 
 #if _APPLY_ROOT_POS_AS_PIVOT
 	Vector3		_rootPivot;
@@ -222,9 +222,9 @@ public class SsPart : IComparable<SsPart>
 	internal
 	SsPart(
 		SsSprite	manager,
-		int			index,		///< index of parts
-		SsPartRes	partRes,	///< part resource
-		SsImageFile	imageFile)	///< source image path, texture and material.
+		int			index,		//!< index of parts
+		SsPartRes	partRes,	//!< part resource
+		SsImageFile	imageFile)	//!< source image path, texture and material.
 	{
 		_mgr			= manager;
 		_index			= index;
@@ -382,8 +382,8 @@ public class SsPart : IComparable<SsPart>
 	
 	internal void
 	ReplaceResource(
-		SsPartRes	partRes,	///< part resource
-		SsImageFile	imageFile)	///< source image path, texture and material.
+		SsPartRes	partRes,	//!< part resource
+		SsImageFile	imageFile)	//!< source image path, texture and material.
 	{
 		_res = partRes;
 			

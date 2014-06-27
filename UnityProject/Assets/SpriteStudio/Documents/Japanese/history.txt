@@ -6,6 +6,22 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+[Ver.1.30b1] (2014/6/27)
+  [不具合修正]
+  ・非表示フラグの値がtrueでも、継承する状態の場合、親パーツの非表示フラグを継承している。
+    Ver.4 では継承しない動作が正しい挙動になりますが、OPTPiX SpriteStudio 5(以下SS5) では逆になります。
+    
+    SsPart.cs 上部の #define _HIDE_PREFERS_INHERITANCE_FOR_V1_29_OR_LESS で切り替えられます。
+    
+    SS5 互換	#define _HIDE_PREFERS_INHERITANCE_FOR_V1_29_OR_LESS
+    Ver.4 互換	//#define _HIDE_PREFERS_INHERITANCE_FOR_V1_29_OR_LESS
+    
+    となります。
+    デフォルトはSS5互換です。
+
+  ・「親の継承設定を参照」するパーツの親も同様に「親の継承設定を参照」するパーツの場合に、
+    再帰的にパーツを遡らず、１つ上の親の継承設定を適用している。
+
 [Ver.1.29f1] (2014/6/9)
   ・SpriteStudio メニューをToolsメニューのサブメニューにした。(AssetStoreの規約準拠)
 

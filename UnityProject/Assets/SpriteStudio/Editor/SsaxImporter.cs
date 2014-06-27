@@ -472,13 +472,46 @@ public class SsaxImporter
 
 				if (partBase.InheritState.Type == SsInheritanceType.Parent)
 				{
-					// copy parent's value and rate statically. dynamic reference is certain implement but it costs much more.
-					for (int i = 0; i < (int)SsKeyAttr.Num; ++i)
+					// * Root part never comes here
+					int parentId = partBase.ParentId;
+					SsPartRes curPart = partBase;
+					for (;;)
 					{
-						SsKeyAttr attr = (SsKeyAttr)i;
-						var param = _anmRes.PartList[partBase.ParentId].InheritParam(attr);
-						partBase.InheritState.Values[i] = param;
-						//Debug.Log(partBase.Name +" inherits parent's attr: " + attr + " use: " + param.Use + " rate:" + param.Rate);
+						SsPartRes parentRes = _anmRes.PartList[parentId];
+
+						if (parentRes.IsRoot)
+						{
+							if (_database.RefersToIndividualInheritValueForRootPart)
+							{
+								// SS5 refers to root as common parts.
+							}
+							else
+							{
+								// In this case, SS4 refers to itself inconsistently.
+								parentRes = curPart;
+								curPart.InheritState.Type = SsInheritanceType.Self;
+							}
+						}
+						else
+						{
+							if (parentRes.InheritState.Type == SsInheritanceType.Parent)
+							{
+								// if parent also refers its parent, trace back until getting to the root.
+								parentId = parentRes.ParentId;
+								curPart = parentRes;
+								continue;
+							}
+						}
+
+						// copy parent's value and rate statically. dynamic reference is certain implement but it costs much more.
+						for (int i = 0; i < (int)SsKeyAttr.Num; ++i)
+						{
+							SsKeyAttr attr = (SsKeyAttr)i;
+							var param = parentRes.InheritParam(attr);
+							partBase.InheritState.Values[i] = param;
+							//Debug.Log(partBase.Name +" inherits parent's attr: " + attr + " use: " + param.Use + " rate:" + param.Rate);
+						}
+						break;
 					}
 				}
 			}

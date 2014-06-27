@@ -169,17 +169,17 @@ public class SsAttrValueBase<T, KeyType> : SsAttrValue
 [System.Serializable]
 public class SsPartRes
 {
-	[HideInInspector] public SsAnimation AnimeRes;	///< the animation which this part belongs to
+	[HideInInspector] public SsAnimation AnimeRes;	//!< the animation which this part belongs to
 	public	string					Name;
 	public	SsPartType				Type;
-	public	SsRect					PicArea;		///< area of source image to refer
-	public	int 					OriginX;		///< pivot. offset from left top (as pixel count).
+	public	SsRect					PicArea;		//!< area of source image to refer
+	public	int 					OriginX;		//!< pivot. offset from left top (as pixel count).
 	public	int 					OriginY;
 	public	int 					MyId;
 	public	int 					ParentId;
 	public	int 					ChildNum;
-	public	int 					SrcObjId;		///< source image ID
-	public	SsSourceObjectType		SrcObjType;		///< for scene(.sssx file) only.
+	public	int 					SrcObjId;		//!< source image ID
+	public	SsSourceObjectType		SrcObjType;		//!< for scene(.sssx file) only.
 	public	SsAlphaBlendOperation 	AlphaBlendType;
 	public	SsInheritanceState		InheritState;
 
@@ -269,8 +269,8 @@ public class SsPartRes
 	public	int						FrameNum;
 	public	SsImageFile				imageFile;
 	public	Vector2[]				UVs;
-	public	Vector3[]				OrgVertices;		///< original 4 vertices will be not modified. it consists of OriginX/Y and PicArea.WH.
-//	public	Vector3[,]				AnimatedVertices;	///< 4 vertices that will animate if this resource has vertex animes.
+	public	Vector3[]				OrgVertices;		//!< original 4 vertices will be not modified. it consists of OriginX/Y and PicArea.WH.
+//	public	Vector3[,]				AnimatedVertices;	//!< 4 vertices that will animate if this resource has vertex animes.
 	
 	public	bool	IsRoot {get {return MyId == 0;}}
 	public	bool	HasParent {get {return ParentId >= 0;}}
@@ -466,7 +466,7 @@ public class SsPartRes
 				SsSoundAttrValue		soundValue = null;
 				switch (attrDesc.ValueType)
 				{
-				case SsKeyValueType.Data:		///< actually decimal or integer
+				case SsKeyValueType.Data:		//!< actually decimal or integer
 					switch (attrDesc.CastType)
 					{
 					default:
@@ -478,25 +478,25 @@ public class SsPartRes
 						break;
 					}
 					break;
-				case SsKeyValueType.Param:		///< actually boolean
+				case SsKeyValueType.Param:		//!< actually boolean
 					v = boolValue = new SsBoolAttrValue();
 					break;
-//				case SsKeyValueType.Point:		///< x,y
+//				case SsKeyValueType.Point:		//!< x,y
 //					v = pointValue = new SsPointAttrValue();
 //					break;
-				case SsKeyValueType.Palette:	///< left,top,right,bottom
+				case SsKeyValueType.Palette:	//!< left,top,right,bottom
 					v = paletteValue = new SsPaletteAttrValue();
 					break;
-				case SsKeyValueType.Color:		///< single or vertex colors
+				case SsKeyValueType.Color:		//!< single or vertex colors
 					v = colorBlendValue = new SsColorBlendAttrValue();
 					break;
-				case SsKeyValueType.Vertex:		///< vertex positions relative to origin
+				case SsKeyValueType.Vertex:		//!< vertex positions relative to origin
 					v = vertexValue = new SsVertexAttrValue();
 					break;
-				case SsKeyValueType.User:		///< user defined data(numeric|point|rect|string...)
+				case SsKeyValueType.User:		//!< user defined data(numeric|point|rect|string...)
 					v = userValue = new SsUserDataAttrValue();
 					break;
-				case SsKeyValueType.Sound:		///< sound id, volume, note on...
+				case SsKeyValueType.Sound:		//!< sound id, volume, note on...
 					v = soundValue = new SsSoundAttrValue();
 					break;
 				}

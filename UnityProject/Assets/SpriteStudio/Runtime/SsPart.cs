@@ -21,6 +21,10 @@
 // inherits hide status when forced visible is available.
 #define _INHERITS_FORCE_VISIBLE
 
+// Hide value prefers to the inherited one even if self hide value is checked.
+// The behaviour is compatible with SS5 and previous player version 1.29 or less if enabled.
+#define _HIDE_PREFERS_INHERITANCE_FOR_V1_29_OR_LESS
+
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -551,11 +555,28 @@ public class SsPart : IComparable<SsPart>
 					nowVisible = false;
 				else
 				{
+#if _HIDE_PREFERS_INHERITANCE_FOR_V1_29_OR_LESS
 					if	(_parent != null
 					&&	res.InheritRate(SsKeyAttr.Hide) > 0.5f)
 						nowVisible = _parent._visible;
 					else
 						nowVisible = !res.Hide(frame);
+#else
+					bool selfVisible = !res.Hide(frame);
+					if (!selfVisible)
+					{
+						// always hide
+						nowVisible = selfVisible;
+					}
+					else
+					{
+						if	(_parent != null
+						&&	res.InheritRate(SsKeyAttr.Hide) > 0.5f)
+							nowVisible = _parent._visible;
+						else
+							nowVisible = selfVisible;
+					}
+#endif
 				}
 #if _INHERITS_FORCE_VISIBLE
 				if (_forceVisibleAvailable)

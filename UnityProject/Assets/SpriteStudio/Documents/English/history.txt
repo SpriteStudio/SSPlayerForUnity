@@ -6,6 +6,8 @@
  Copyright(C) Web Technology Corp.
 =============================================================================
 
+Please refer to the Japanese/history.txt for the latest information.
+
 [Ver.1.29f1] (2014/6/9)
   - Moved SpriteStudio menu to under Tools menu for AssetStore regulation.
   

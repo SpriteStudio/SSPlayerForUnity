@@ -507,6 +507,12 @@ public class SsPart : IComparable<SsPart>
 			int i = 0;
 			foreach (var e in _subAnimes)
 			{
+				if (_curPicArea != _subAnimePartRes[i].PicArea)
+				{
+					// update UVs to the one which sub anime part has.
+					_curPicArea = _subAnimePartRes[i].PicArea;
+					_mgr._uvChanged = true;
+				}
 				UpdateSub(_subAnimePartRes[i], (int)e.Frame);
 				++i;
 			}
@@ -526,7 +532,7 @@ public class SsPart : IComparable<SsPart>
 		_subAnimes.Add(subAnime);
 		_subAnimePartRes.Add(subAnimePartRes);
 	}
-		
+
 	internal void
 	UpdateSub(SsPartRes res, int frame, bool initialize = false)
 	{

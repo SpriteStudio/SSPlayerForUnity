@@ -39,7 +39,7 @@ public class SsAssetPostProcessor : AssetPostprocessor
 		}
 		_database = go.GetComponent<SsAssetDatabase>();
 	}
-	
+
 	static public void
 	OnPostprocessAllAssets(
 		string[]	importedAssets,
@@ -158,7 +158,7 @@ public class SsAssetPostProcessor : AssetPostprocessor
 		}
 		catch
 		{
-//			Debug.LogWarning("ABORT importing");
+			Debug.LogWarning("ABORT importing");
 			throw;
 		}
 		finally
@@ -512,7 +512,8 @@ public class SsAssetPostProcessor : AssetPostprocessor
 		while (paths.Count != 0)
 		{
 			string path = paths.Pop();
-			string[] files = Directory.GetFiles(path, "*.asset");
+			// limited *_ssa files only 2015/4/27
+			string[] files = Directory.GetFiles(path, "*_ssa.asset");
 			foreach (var e in files)
 				allAssets.Add(e.Substring(Application.dataPath.Length - 6));
 			foreach (string e in Directory.GetDirectories(path)) 
@@ -667,7 +668,8 @@ public class PrefabricatableObject
 //			Debug.Log("apply to file " + prefabPath);
 			// apply to actual file
 			EditorUtility.SetDirty(gameObject);
-			AssetDatabase.SaveAssets();
+			// this invokes import during import so should do after at a time 2015/4/27
+			//AssetDatabase.SaveAssets();
 		}
 
 		prefabPath = null;

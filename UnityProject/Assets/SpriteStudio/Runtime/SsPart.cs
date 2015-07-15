@@ -383,12 +383,16 @@ public class SsPart : IComparable<SsPart>
 	#endif
 			SetToSubmeshArray(_index - 1);
 		}
- 		else	// [FIXED BUG #2] Crash on IL2CPP ARM64bit.
+		#if true // [FIXED BUG #2] Crash on IL2CPP ARM64bit. 
+ 		else
 		{
-			_triIndices = _emptyTriIndices;
-			SetToSubmeshArray(_index - 1);
+			if (_index >= 1)
+			{
+				_triIndices = _emptyTriIndices;
+				SetToSubmeshArray(_index - 1);
+			}
 		}
-
+		#endif // [FIXED BUG #2] Crash on IL2CPP ARM64bit. 
 	}
 	
 	internal void

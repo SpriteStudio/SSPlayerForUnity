@@ -123,6 +123,8 @@ public class SsPart : IComparable<SsPart>
 	
 	internal Vector3[]		_vertPositions;
 	int[]		_triIndices;
+	static internal int[]	_emptyTriIndices = {0,0,0,0,0,0}; // [FIXED BUG #2] Crash on IL2CPP ARM64bit.
+
 	int			_index;		//!< index of parts
 	int			_vIndex;	//!< actual index in vertex/color/uv buffers.
 
@@ -379,9 +381,14 @@ public class SsPart : IComparable<SsPart>
 	#else
 			_triIndices = new int[]{_vIndex+0,_vIndex+1,_vIndex+2,_vIndex+2,_vIndex+3,_vIndex+0};	// order is LT->RT->RB->RB->LB->LT
 	#endif
-			
 			SetToSubmeshArray(_index - 1);
 		}
+ 		else	// [FIXED BUG #2] Crash on IL2CPP ARM64bit.
+		{
+			_triIndices = _emptyTriIndices;
+			SetToSubmeshArray(_index - 1);
+		}
+
 	}
 	
 	internal void
@@ -463,11 +470,11 @@ public class SsPart : IComparable<SsPart>
 #else
 		bool v = _forceVisibleAvailable ? _forceVisible : _visible;
 #endif
-		// if _triIndices is null, draw nothing.
+		// if _triIndices is null, draw nothing or could crash so it must be set.
 #if _USE_TRIANGLE_STRIP
-		_mesh.SetTriangleStrip(v ? _triIndices : null, index);
+		_mesh.SetTriangleStrip(v ? _triIndices : _emptyTriIndices, index); // [FIXED BUG #2] Crash on IL2CPP ARM64bit.
 #else
-		_mesh.SetTriangles(v ? _triIndices : null, index);
+		_mesh.SetTriangles(v ? _triIndices : _emptyTriIndices, index); // [FIXED BUG #2] Crash on IL2CPP ARM64bit.
 #endif
 		_subMeshIndex = index;
 	}
@@ -487,9 +494,9 @@ public class SsPart : IComparable<SsPart>
 		if (_triIndices == null) return;
 
 #if _USE_TRIANGLE_STRIP
-		_mesh.SetTriangleStrip(v ? _triIndices : null, _subMeshIndex);
+		_mesh.SetTriangleStrip(v ? _triIndices : _emptyTriIndices, _subMeshIndex); // [FIXED BUG #2] Crash on IL2CPP ARM64bit.
 #else
-		_mesh.SetTriangles(v ? _triIndices : null, _subMeshIndex);
+		_mesh.SetTriangles(v ? _triIndices : _emptyTriIndices, _subMeshIndex); // [FIXED BUG #2] Crash on IL2CPP ARM64bit.
 #endif
 	}
 	
@@ -507,6 +514,12 @@ public class SsPart : IComparable<SsPart>
 			int i = 0;
 			foreach (var e in _subAnimes)
 			{
+				if (_curPicArea != _subAnimePartRes[i].PicArea)
+				{
+					// update UVs to the one which sub anime part has.
+					_curPicArea = _subAnimePartRes[i].PicArea;
+					_mgr._uvChanged = true;
+				}
 				UpdateSub(_subAnimePartRes[i], (int)e.Frame);
 				++i;
 			}
@@ -526,7 +539,7 @@ public class SsPart : IComparable<SsPart>
 		_subAnimes.Add(subAnime);
 		_subAnimePartRes.Add(subAnimePartRes);
 	}
-		
+
 	internal void
 	UpdateSub(SsPartRes res, int frame, bool initialize = false)
 	{
